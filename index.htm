@@ -15,14 +15,14 @@
         <div id='inputParamsDiv'>
             <form id='inputForm'>
                 x0:&nbsp;<input type="text" id="x0" name="x0" />
-                y0:&nbsp;<input type="text" id="y0" name="y0" /><br />
+                y0:&nbsp;<input type="text" id="y0" name="y0" />
+                z0:&nbsp;<input type="text" id="z0" name="z0" /><br />
                 xdot0:&nbsp;<input type="text" id="xdot0" name="xdot0" />
-                ydot0:&nbsp;<input type="text" id="ydot0" name="ydot0" /><br />
+                ydot0:&nbsp;<input type="text" id="ydot0" name="ydot0" />
+                zdot0:&nbsp;<input type="text" id="zdot0" name="zdot0" /><br />
                 t0:&nbsp;<input type="text" id="t0" name="t0" />
                 tf:&nbsp;<input type="text" id="tf" name="tf"/>
                 dt:&nbsp;<input type="text" id="dt" name="dt"/><br />
-                <input type="hidden" id="z0" name="z0" value="0.0" />
-                <input type="hidden" id="zdot0" name="zdot0" value="0.0" />
             </form>
             <button id="send-parameters" >Send</button>
         </div>
@@ -30,11 +30,12 @@
             <button id="stop-simulation" disabled>Stop simulation</button>
             <button id="start-simulation" disabled>Run simulation</button>
             <button id="show-hide">Show plots</button>
-            <div class="main_plot_container" id="x-y"></div>
         </div>
+        <div class="main_plot_container" id="x-y"></div>
         <div id="bottomDiv">
             <div class="secondary_plot_container" id="x-time"></div>
             <div class="secondary_plot_container" id="y-time"></div>
+            <div class="secondary_plot_container" id="z-time"></div>
         </div>
     </div>
 
@@ -56,9 +57,14 @@
                     data: JSON.stringify(parametersObj),
                     dataType: 'json',
                     success: function(data){
-                        alert('Success');
-                        alert(data);
-                        //plotProjection(document.getElementById("plot1"), "x", "y");
+                        //plotProjection(document.getElementById("x-y"), "x", "y", data.x, data.y);
+                        plot3D(document.getElementById("x-y"), "3D plot", data.x, data.y, data.z);
+                        $("#topDiv").show();
+                        toggleDetailView();
+                        plotProjection(document.getElementById("x-time"), "x", "t", data.t, data.x);
+                        plotProjection(document.getElementById("y-time"), "y", "t", data.t, data.y);
+                        plotProjection(document.getElementById("z-time"), "z", "t", data.t, data.z);
+
                     },
                     error: function(xhr, status, error) {
                       alert(error);
@@ -70,6 +76,10 @@
             });
 
             $("#show-hide").click(function(){
+                toggleDetailView();
+            });
+
+            function toggleDetailView(){
                 if ($("#bottomDiv").is(":visible")) {
                     $("#bottomDiv").hide();
                     $("#show-hide").html('Show plots')
@@ -77,7 +87,8 @@
                     $("#bottomDiv").show();
                     $("#show-hide").html('Hide plots')
                 }
-            });
+            }
+
             $("#start-simulation").click(function(){
                 $("#start-simulation").prop("disabled",true);
                 $("#stop-simulation").prop("disabled",false);
