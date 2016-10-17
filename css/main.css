@@ -1,0 +1,29 @@
+.main_plot_container {
+    margin-right: 25%;
+    margin-left: 25%;
+    height: 100%;
+}
+
+.secondary_plot_container {
+    width: 24%;
+    height: 100%;
+    float: left;
+    border-right: 1px solid black;
+    margin-right: 1px;
+    padding-left: 4px;
+}
+
+#topDiv {
+    height: 100%;
+    width: 100%;
+}
+
+#bottomDiv {
+    height: 50%;
+    width: 100%;
+    border-top: 1px solid black;
+}
+
+#plot4 {
+    border-right: 0px;
+}
